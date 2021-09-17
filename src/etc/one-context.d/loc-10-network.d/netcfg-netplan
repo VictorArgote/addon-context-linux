@@ -312,6 +312,14 @@ EOT
 
         case "${method}" in
             ''|static)
+                ## Add dhcp: true even when static
+                # and force dhclient to get static ip from DHCP server
+                # by overwritting dhclient.conf
+                if [ -n ${DHCP_HOSTNAME} ]; then
+                    cp /etc/dhcp/dhclient.conf.template /etc/dhcp/dhclient.conf
+                    envsubst < /etc/dhcp/dhclient.conf.template > /etc/dhcp/dhclient.conf
+                    gen_dhcp_conf
+                fi
                 : # in gen_addresses
                 ;;
             dhcp)
